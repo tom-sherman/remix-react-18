@@ -1,7 +1,6 @@
 import type { MetaFunction, LoaderFunction } from "remix";
 import { useLoaderData, json, Link } from "remix";
-// @ts-ignore
-import { useId } from 'react';
+import * as React from 'react';
 
 type IndexData = {
   resources: Array<{ name: string; url: string }>;
@@ -56,9 +55,13 @@ export let meta: MetaFunction = () => {
   };
 };
 
+const Heavy = React.lazy(() => import('../components/Heavy'))
+
 // https://remix.run/guides/routing#index-routes
 export default function Index() {
   let data = useLoaderData<IndexData>();
+  // @ts-ignore
+  const id = React.useId();
 
   return (
     <div className="remix__page">
@@ -76,7 +79,8 @@ export default function Index() {
           <code>app/routes/demos</code> and <code>app/styles/demos</code>{" "}
           folders when you're ready to turn this into your next project.
         </p>
-        <h3>This is a a stable ID using useId: {useId()}</h3>
+        <h3>This is a a stable ID using useId: {id}</h3>
+        <p>A heavy component: <React.Suspense fallback="Loading..."><Heavy /></React.Suspense></p>
       </main>
       <aside>
         <h2>Demos In This App</h2>
